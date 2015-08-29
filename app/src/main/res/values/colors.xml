@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--color name="primary">#ff00a9ff</color-->
+    <color name="primary">#ff2090ea</color>
+    <color name="primary_dark">#205081</color>
+    <color name="accent">#ffc107</color>
+    <color name="window_bg">#ff00bdff</color>
+    <color name="view_bg">#ffffff</color>
+    <color name="primary_text">#ffffff</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#212121</color>
+    <color name="divider">#B6B6B6</color>
+    <color name="after">#ffb3deff</color>
+
+    <color name="white">#ffffff</color>
+
+    <color name="toolbar_title">@color/white</color>
+    <color name="cardview_initial_background">@color/white</color>
+
+    <color name="stroke">#dddddd</color>
+    <color name="text_light">#66000000</color>
+    <color name="card_text">#ff8d8d8d</color>
+    <color name="card_title_text">#ff707070</color>
+    <color name="card_light_text">#ffb5b5b5</color>
+    <color name="card_grid_text">#ff707070</color>
+    <color name="card_separator">#ffe5e5e5</color>
+    <color name="card_border">#ffdedede</color>
+</resources>

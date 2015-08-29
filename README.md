@@ -1,2 +1,4 @@
 # Blackhole
-[A] Blackhole is a HTTP File Transfer Server
+Blackhole is a HTTP File Transfer Server.
+
+Heavily based on com.varma.android.aws.

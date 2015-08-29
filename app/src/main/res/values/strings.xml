@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">Blackhole Transfer</string>
+	<string name="app_desc">Transfer file in your Network</string>
+	<string name="app_title">Blackhole</string>
+	<string name="app_info"><b>Blackhole Transfer</b> is a simple web server for android platform.\n</string>
+
+	<string name="start_caption">Start Server</string>
+    <string name="stop_caption">Stop Server</string>
+
+	<string name="notification_started_text">Server started.</string>
+
+	<string name="menu_about">About</string>
+    <string name="about_title">About Blackhole</string>
+
+    <string name="menu_preference">Settings</string>
+	<string name="preference_title">Blackhole settings</string>
+
+	<string name="pref_dir_title">Directory</string>
+	<string name="pref_dir_message">Enter the SDCARD directory to list (don\'t prepend /, if blank the SDCARD root folder will be listed).\n</string>
+	<string name="pref_dir_summary">Select SDCARD the directory to list</string>
+	<string name="pref_serverport_title">Server Port</string>
+	<string name="pref_serverport_message">Enter server port.\n</string>
+	<string name="pref_serverport_summary">Enter server port</string>
+
+	<string name="log_running">Blackhole is running…</string>
+	<string name="log_notrunning">Blackhole is stopped…</string>
+
+    <string name="storage_error">Error, Can\'t create Blackhole folder on External Storage</string>
+    <string name="share_success">File shared successfully</string>
+    <string name="dismiss">Stop</string>
+
+    <string name="icon_credit">Black Hole by Simon Martin from the Noun Project</string>
+</resources>
