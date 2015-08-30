@@ -12,6 +12,8 @@ import org.apache.http.entity.ContentProducer;
 import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
+import org.nikkii.embedhttp.impl.HttpHeader;
+import org.nikkii.embedhttp.impl.HttpStatus;
 import org.thezero.blackhole.utility.Utility;
 
 import java.io.File;
@@ -46,12 +48,12 @@ public class FileHandler implements HttpRequestHandler{
         if(file.exists()){
             resp = Utility.loadFileAsByte(file.getAbsolutePath());
             contentType = Utility.getMimeTypeForFile(file.getName());
-            code = 200;
+            code = HttpStatus.OK.getCode();
         }else{
             AssetManager mgr = context.getAssets();
             resp = Utility.loadInputStreamAsByte(mgr.open("notfound.html"));
-            contentType = "text/html";
-            code = 404;
+            contentType = Utility.MIME_TYPES.get("html");
+            code = HttpStatus.NOT_FOUND.getCode();
         }
         r=resp;
 
@@ -63,7 +65,7 @@ public class FileHandler implements HttpRequestHandler{
 
         ((EntityTemplate)entity).setContentType(contentType);
         response.setStatusCode(code);
-        response.addHeader("Content-Disposition", "attachment");
+        response.addHeader(HttpHeader.CONTENT_DISPOSITION, "attachment");
         response.setEntity(entity);
 	}
 }

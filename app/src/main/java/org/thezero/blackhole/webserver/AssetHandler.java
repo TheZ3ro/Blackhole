@@ -12,6 +12,7 @@ import org.apache.http.entity.ContentProducer;
 import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
+import org.nikkii.embedhttp.impl.HttpStatus;
 import org.thezero.blackhole.utility.Utility;
 
 import java.io.IOException;
@@ -38,18 +39,18 @@ public class AssetHandler implements HttpRequestHandler {
         try {
             resp = Utility.loadInputStreamAsByte(mgr.open(fileUri));
             contentType = Utility.getMimeTypeForFile(fileUri);
-            code = 200;
+            code = HttpStatus.OK.getCode();
         } catch (IOException e){
             resp = Utility.loadInputStreamAsByte(mgr.open("notfound.html"));
-            contentType = "text/html";
-            code = 404;
+            contentType = Utility.MIME_TYPES.get("html");
+            code = HttpStatus.NOT_FOUND.getCode();
         }
         r=resp;
 
         HttpEntity entity = new EntityTemplate(new ContentProducer() {
     		public void writeTo(final OutputStream outstream) throws IOException {
                 outstream.write(r);
-            }
+               }
     	});
 
 		((EntityTemplate)entity).setContentType(contentType);

@@ -30,6 +30,7 @@ public class WebServer extends Thread {
     private static final String HOME_PATTERN = "/index.html";
 	private static final String FILE_PATTERN = "/file/*";
     private static final String GETAPK_PATTERN = "/blackhole.apk";
+    private static final String UPLOAD_PATTERN = "/upload";
 	
 	private boolean isRunning = false;
 	private Context context = null;
@@ -67,6 +68,7 @@ public class WebServer extends Thread {
         registry.register(DIR_PATTERN, new ListingHandler(context));
         registry.register(FILE_PATTERN, new FileHandler(context));
         registry.register(GETAPK_PATTERN, new GetApkHandler(context));
+        registry.register(UPLOAD_PATTERN, new UploadHandler(context));
         
         httpService.setHandlerResolver(registry);
 	}
@@ -122,4 +124,5 @@ public class WebServer extends Thread {
 	public Context getContext() {
 		return context;
 	}
+
 }

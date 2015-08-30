@@ -3,7 +3,6 @@ package org.thezero.blackhole.webserver;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
-import android.util.Log;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
@@ -16,6 +15,7 @@ import org.apache.http.entity.ContentProducer;
 import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
+import org.nikkii.embedhttp.impl.HttpStatus;
 import org.thezero.blackhole.FileL;
 import org.thezero.blackhole.R;
 import org.thezero.blackhole.utility.Utility;
@@ -35,7 +35,7 @@ public class ListingHandler implements HttpRequestHandler {
 
 	@Override
 	public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws HttpException, IOException {
-		String contentType = "text/html";
+		String contentType = Utility.MIME_TYPES.get("html");
         Integer code;
 
         final byte[] r;
@@ -43,10 +43,10 @@ public class ListingHandler implements HttpRequestHandler {
         AssetManager mgr = context.getAssets();
         try {
             resp = Utility.loadInputStreamAsString(mgr.open("index.html"));
-            code = 200;
+            code = HttpStatus.OK.getCode();
         } catch (IOException e){
             resp = Utility.loadInputStreamAsString(mgr.open("notfound.html"));
-            code = 404;
+            code = HttpStatus.NOT_FOUND.getCode();
         }
 
         final ArrayList<FileL> fl = new ArrayList<>();
@@ -66,7 +66,6 @@ public class ListingHandler implements HttpRequestHandler {
                 folder = path;
             }
         }
-        Log.w("TAG", Utility.BLACKHOLE_PATH + folder);
         File f = new File(Utility.BLACKHOLE_PATH +folder);
         if(f.isDirectory()) {
             File[] files = f.listFiles();

@@ -69,11 +69,8 @@ public class Utility {
 
 	public static String openHTMLString(Context context, int id){
 		InputStream is = context.getResources().openRawResource(id);
-		
 		return Utility.convertStreamToString(is);
 	}
-	
-	
 
     /**
      * Convert byte array to hex string
@@ -198,6 +195,7 @@ public class Utility {
     public static String BLACKHOLE_PATH = SD_PATH+"/Blackhole";
 
     public static final String MIME_DEFAULT_BINARY = "application/octet-stream";
+    public static final String MIME_MULTIPART = "multipart/form-data";
     public static final Map<String, String> MIME_TYPES = new HashMap<String, String>() {
         {
             put("css", "text/css");
