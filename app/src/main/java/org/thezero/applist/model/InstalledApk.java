@@ -2,7 +2,7 @@ package org.thezero.applist.model;
 
 import android.graphics.drawable.*;
 
-import org.thezero.blackhole.utility.Utility;
+import org.thezero.blackhole.Utility;
 
 import java.io.*;
 

@@ -31,5 +31,8 @@
     <string name="share_success">File shared successfully</string>
     <string name="dismiss">Stop</string>
 
+    <string name="file_upl">File uploaded successfully!</string>
+    <string name="file_name">File name: </string>
+
     <string name="icon_credit">Black Hole by Simon Martin from the Noun Project</string>
 </resources>

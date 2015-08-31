@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import org.thezero.blackhole.R;
 import org.thezero.blackhole.service.HTTPService;
-import org.thezero.blackhole.utility.Utility;
+import org.thezero.blackhole.Utility;
 import org.thezero.blackhole.webserver.WebServer;
 
 import java.io.File;

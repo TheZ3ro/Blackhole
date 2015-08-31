@@ -299,6 +299,9 @@ img {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.file-link.uploaded div {
+  background-color: rgba(0, 93, 255, 0.11);
+}
 .file-link:hover div {
   background-color: #EEE;
   transition: all 1s;

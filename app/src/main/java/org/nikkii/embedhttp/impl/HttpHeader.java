@@ -20,4 +20,5 @@ public class HttpHeader {
     public static final String AUTHORIZATION = "Authorization";
     public static final String COOKIE = "Cookie";
     public static final String SET_COOKIE = "Set-Cookie";
+    public static final String LOCATION = "Location";
 }

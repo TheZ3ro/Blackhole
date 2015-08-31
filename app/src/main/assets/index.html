@@ -41,12 +41,18 @@ c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.5
               Click on a folder to open the folder view.
               Click the double point to go to parent folder.<br/>
               Enjoy Blackhole Transfer</p>
+              {{#messages}}
+              <div class="alert alert-{{status}} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>{{title}}</strong> {{text}}
+              </div>
+              {{/messages}}
             <div class="posts">
                 <div class="row">
                   <div class="wd col-md-12 col-sm-12 col-xs-12">Current Folder: {{wd}}</div>
                 </div>
                 {{#filelist}}
-                <div class="row"><a class="file-link" href="{{link}}">
+                <div class="row"><a class="file-link {{uploaded}}" href="{{link}}">
                   <div class="filename col-md-8 col-sm-8 col-xs-12">{{name}}</div>
                   <div class="ext col-md-2 col-sm-2 col-xs-6">{{type}}</div>
                   <div class="size col-md-2 col-sm-2 col-xs-6"><span class="counter counter-red">{{size}}</span></div>
