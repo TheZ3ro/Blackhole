@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{title}}</title>
+    <title>Upload - Blackhole Transfer</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
     <!-- Custom CSS -->
@@ -42,7 +42,8 @@ c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.5
               Click on a folder to open the folder view.
               Click the double point to go to parent folder.<br/>
               Enjoy Blackhole Transfer</p>
-              <form action="/upload" enctype="multipart/form-data" method="post">
+              <p>If you can't select your file try another Browser like Chrome or Firefox</p>
+              <form id="form" action="/upload" enctype="multipart/form-data" method="post">
                <label for="datafile1">File: (You can upload only one file a time)</label>
                   <input type="file" id="datafile1" name="datafile1" class="filestyle" data-icon="false" data-placeholder="No file"><br>
                <input class="btn btn-default" type="submit" value="Upload">
