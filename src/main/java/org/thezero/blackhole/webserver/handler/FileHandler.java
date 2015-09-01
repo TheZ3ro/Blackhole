@@ -4,21 +4,18 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.entity.ContentProducer;
-import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.nikkii.embedhttp.impl.HttpHeader;
 import org.nikkii.embedhttp.impl.HttpStatus;
 import org.thezero.blackhole.Utility;
+import org.thezero.blackhole.webserver.ResponseForger;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 public class FileHandler implements HttpRequestHandler{
@@ -43,29 +40,16 @@ public class FileHandler implements HttpRequestHandler{
         folder = path;
         final File file = new File(Utility.BLACKHOLE_PATH +folder+s.get(s.size()-1));
 
-        final byte[] r;
-        byte[] resp;
+        ResponseForger responseForger;
         if(file.exists()){
-            resp = Utility.loadFileAsByte(file.getAbsolutePath());
-            contentType = Utility.getMimeTypeForFile(file.getName());
-            code = HttpStatus.OK.getCode();
+            responseForger = new ResponseForger(Utility.loadFileAsByte(file.getAbsolutePath()),Utility.getMimeTypeForFile(file.getName()),HttpStatus.OK);
         }else{
             AssetManager mgr = context.getAssets();
-            resp = Utility.loadInputStreamAsByte(mgr.open("notfound.html"));
-            contentType = Utility.MIME_TYPES.get("html");
-            code = HttpStatus.NOT_FOUND.getCode();
+            responseForger = new ResponseForger(Utility.loadInputStreamAsByte(mgr.open("notfound.html")),Utility.MIME_TYPES.get("html"),HttpStatus.NOT_FOUND);
         }
-        r=resp;
 
-        HttpEntity entity = new EntityTemplate(new ContentProducer() {
-            public void writeTo(final OutputStream outstream) throws IOException {
-                outstream.write(r);
-            }
-        });
-
-        ((EntityTemplate)entity).setContentType(contentType);
-        response.setStatusCode(code);
+        response.setStatusCode(responseForger.getStatusCode());
         response.addHeader(HttpHeader.CONTENT_DISPOSITION, "attachment");
-        response.setEntity(entity);
+        response.setEntity(responseForger.forgeResponse());
 	}
 }

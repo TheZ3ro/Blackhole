@@ -4,25 +4,19 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
 
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.entity.ContentProducer;
-import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.nikkii.embedhttp.impl.HttpStatus;
-import org.thezero.blackhole.webserver.MFile;
 import org.thezero.blackhole.R;
 import org.thezero.blackhole.Utility;
+import org.thezero.blackhole.webserver.MFile;
+import org.thezero.blackhole.webserver.ResponseForger;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,18 +29,12 @@ public class ListingHandler implements HttpRequestHandler {
 
 	@Override
 	public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws HttpException, IOException {
-		String contentType = Utility.MIME_TYPES.get("html");
-        Integer code;
-
-        final byte[] r;
-        String resp;
+        ResponseForger responseForger;
         AssetManager mgr = context.getAssets();
         try {
-            resp = Utility.loadInputStreamAsString(mgr.open("index.html"));
-            code = HttpStatus.OK.getCode();
+            responseForger = new ResponseForger(Utility.loadInputStreamAsString(mgr.open("index.html")),Utility.MIME_TYPES.get("html"),HttpStatus.OK);
         } catch (IOException e){
-            resp = Utility.loadInputStreamAsString(mgr.open("notfound.html"));
-            code = HttpStatus.NOT_FOUND.getCode();
+            responseForger = new ResponseForger(Utility.loadInputStreamAsByte(mgr.open("notfound.html")),Utility.MIME_TYPES.get("html"),HttpStatus.NOT_FOUND);
         }
 
         final ArrayList<MFile> fl = new ArrayList<>();
@@ -79,22 +67,12 @@ public class ListingHandler implements HttpRequestHandler {
         }
         final String wfolder = folder;
 
-        Template tmpl = Mustache.compiler().compile(resp);
-        r=tmpl.execute(new Object() {
+        response.setStatusCode(responseForger.getStatusCode());
+        response.setEntity(responseForger.forgeResponse(new Object() {
             Object filelist = fl;
             String title = context.getString(R.string.app_title);
             String wd = wfolder;
-        }).getBytes();
-
-        HttpEntity entity = new EntityTemplate(new ContentProducer() {
-            public void writeTo(final OutputStream outstream) throws IOException {
-                outstream.write(r);
-            }
-        });
-		
-		((EntityTemplate)entity).setContentType(contentType);
-        response.setStatusCode(code);
-		response.setEntity(entity);
+        }));
 	}
 
 }

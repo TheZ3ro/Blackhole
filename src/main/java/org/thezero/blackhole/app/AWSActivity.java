@@ -49,7 +49,7 @@ public class AWSActivity extends ActionBarActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
-        Log.w("",action);
+        //Log.w("",action);
 
         File folder = new File(Utility.BLACKHOLE_PATH);
         boolean success = true;
@@ -70,23 +70,32 @@ public class AWSActivity extends ActionBarActivity {
         if(Intent.ACTION_SEND.equals(action) && type != null) {
             Uri shareUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if(folder.exists()) {
-                String path = Utility.getFilePathFromUri(this,shareUri);
-                File shareFile = new File(path);
-                File toFile = new File(Utility.BLACKHOLE_PATH+File.separator+shareFile.getName());
-                try {
-                    Utility.copy(shareFile,toFile);
-                    if(toFile.exists()){
-                        Toast.makeText(AWSActivity.this, getString(R.string.share_success), Toast.LENGTH_LONG).show();
-                        Intent service = new Intent(AWSActivity.this,HTTPService.class);
-                        if(!AppSettings.isServiceStarted(AWSActivity.this)){
-                            startService(service);
-                            AppSettings.setServiceStarted(AWSActivity.this, true);
-                            setButtonText(true);
-                            setInfoText(true);
+                String path=null;
+                if(shareUri.getScheme().equals("content")){
+                    path = Utility.getFilePathFromUri(this,shareUri);
+                }else if(shareUri.getScheme().equals("file")){
+                    path = shareUri.getPath();
+                }
+                if(path!=null) {
+                    File shareFile = new File(path);
+                    File toFile = new File(Utility.BLACKHOLE_PATH + File.separator + shareFile.getName());
+                    try {
+                        Utility.copy(shareFile, toFile);
+                        if (toFile.exists()) {
+                            Toast.makeText(AWSActivity.this, getString(R.string.share_success), Toast.LENGTH_LONG).show();
+                            Intent service = new Intent(AWSActivity.this, HTTPService.class);
+                            if (!AppSettings.isServiceStarted(AWSActivity.this)) {
+                                startService(service);
+                                AppSettings.setServiceStarted(AWSActivity.this, true);
+                                setButtonText(true);
+                                setInfoText(true);
+                            }
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }else{
+                    Toast.makeText(AWSActivity.this, getString(R.string.share_failed), Toast.LENGTH_LONG).show();
                 }
             }
         }

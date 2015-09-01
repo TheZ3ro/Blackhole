@@ -29,6 +29,7 @@
 
     <string name="storage_error">Error, Can\'t create Blackhole folder on External Storage</string>
     <string name="share_success">File shared successfully</string>
+    <string name="share_failed">Failed to share the file</string>
     <string name="dismiss">Stop</string>
 
     <string name="file_upl">File uploaded successfully!</string>

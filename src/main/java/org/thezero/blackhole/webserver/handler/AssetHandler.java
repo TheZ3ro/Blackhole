@@ -25,8 +25,6 @@ public class AssetHandler implements HttpRequestHandler {
 
 	@Override
 	public void handle(HttpRequest request, HttpResponse response, HttpContext httpContext) throws HttpException, IOException {
-		String contentType;
-        Integer code;
         Uri uri = Uri.parse(request.getRequestLine().getUri());
         String fileUri = URLDecoder.decode(uri.getLastPathSegment());
 
