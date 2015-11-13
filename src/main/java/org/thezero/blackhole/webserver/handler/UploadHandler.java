@@ -33,6 +33,8 @@ import java.util.Map;
 public class UploadHandler implements HttpRequestHandler {
 	private Context context = null;
 
+    public static final int NOTIFICATION_SHARED_ID = 2;
+
 	public UploadHandler(Context context){
 		this.context = context;
 	}
@@ -73,7 +75,7 @@ public class UploadHandler implements HttpRequestHandler {
                         Map<String, String> cdParms = ValueParser.parse(cd);
                         // Sorry, one file a time
                         String fieldName = cdParms.get("name");
-                        if(fieldName.equals("datafile1")) {
+                        if(fieldName.equals("myfile")) {
                             File toFile = new File(Utility.BLACKHOLE_PATH + File.separator + cdParms.get("filename"));
                             try {
                                 Utility.copy(is, toFile);
@@ -85,7 +87,7 @@ public class UploadHandler implements HttpRequestHandler {
                                     response.setHeader(HttpHeader.LOCATION,"/");
                                     responseForger.setStatusCode(HttpStatus.OK);
                                 }
-                            } catch (IOException e) {
+                            }catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -101,7 +103,7 @@ public class UploadHandler implements HttpRequestHandler {
                 e.printStackTrace();
             }
         }else{
-            response.setHeader(HttpHeader.LOCATION,"/");
+            response.setHeader(HttpHeader.LOCATION, "/");
             responseForger.setStatusCode(HttpStatus.FOUND);
         }
 

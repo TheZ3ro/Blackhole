@@ -7,14 +7,15 @@
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/bootstrap.min.css">
-    <link rel="stylesheet" href="/bootstrap-filestyle.min.js">
-    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <link rel="stylesheet" href="./bootstrap-filestyle.min.js">
+    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="./uploadfile.css">
   </head>
   <body>
     <header class="site-header">
       <div class="wrap">
-        <a class="site-title" href="/"><img class="logo" src="/logo.png"/>Blackhole Transfer</a>
+        <a class="site-title" href="/"><img class="logo" src="./logo.png"/>Blackhole Transfer</a>
         <nav class="site-nav">
           <a href="#" class="menu-icon">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -43,11 +44,8 @@ c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.5
               Click the double point to go to parent folder.<br/>
               Enjoy Blackhole Transfer</p>
               <p>If you can't select your file try another Browser like Chrome or Firefox</p>
-              <form id="form" action="/upload" enctype="multipart/form-data" method="post">
-               <label for="datafile1">File: (You can upload only one file a time)</label>
-                  <input type="file" id="datafile1" name="datafile1" class="filestyle" data-icon="false" data-placeholder="No file"><br>
-               <input class="btn btn-default" type="submit" value="Upload">
-              </form>
+              <div id="status"></div><br/>
+              <div id="mulitplefileuploader">Upload</div>
           </div>
         </div>
       </div>
@@ -61,8 +59,34 @@ c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.5
           </ul>
         </div>
       </footer>
-      <script type="text/javascript" src="/jquery.min.js"></script>
-      <script type="text/javascript" src="/bootstrap.min.js"></script>
-      <script type="text/javascript" src="/bootstrap-filestyle.min.js"></script>
+      <script type="text/javascript" src="./jquery.min.js"></script>
+      <script type="text/javascript" src="./jquery.form.js"></script>
+      <script type="text/javascript" src="./bootstrap.min.js"></script>
+      <script type="text/javascript" src="./bootstrap-filestyle.min.js"></script>
+      <script type="text/javascript" src="./jquery.uploadfile.min.js"></script>
+      <script>
+        $(document).ready(function()
+        {
+
+        var settings = {
+            url: "upload",
+            method: "POST",
+            allowedTypes:"*",
+            fileName: "myfile",
+            multiple: true,
+            onSuccess:function(files,data,xhr)
+            {
+                $("#status").html("<font color='green'>Upload is success</font>");
+
+            },
+            onError: function(files,status,errMsg)
+            {
+                $("#status").html("<font color='red'>Upload is Failed</font>");
+            }
+        }
+        $("#mulitplefileuploader").uploadFile(settings);
+
+        });
+        </script>
   </body>
 </html>

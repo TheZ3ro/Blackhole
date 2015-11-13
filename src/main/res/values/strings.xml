@@ -10,6 +10,7 @@
     <string name="stop_caption">Stop Server</string>
 
 	<string name="notification_started_text">Server started.</string>
+	<string name="notification_shared_text">File uploaded successfully!</string>
 
 	<string name="menu_about">About</string>
     <string name="about_title">About Blackhole</string>

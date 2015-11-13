@@ -14,7 +14,7 @@ import org.thezero.blackhole.app.AppSettings;
 import org.thezero.blackhole.webserver.WebServer;
 
 public class HTTPService extends Service {
-	private static final int NOTIFICATION_STARTED_ID = 1;
+	public static final int NOTIFICATION_STARTED_ID = 1;
 	private NotificationManager notifyManager = null;
 	private WebServer server = null;
 	
@@ -56,20 +56,20 @@ public class HTTPService extends Service {
 		startIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent intent = PendingIntent.getActivity(this, 0, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        /*Intent dismissIntent = new Intent(this,AWSActivity.class);
+        Intent dismissIntent = new Intent(this,AWSActivity.class);
         dismissIntent.setAction(AWSActivity.ACTION_DISMISS);
         dismissIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent piDismiss = PendingIntent.getActivity(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        */
+        PendingIntent piDismiss = PendingIntent.getService(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_notify)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText(getString(R.string.notification_started_text))
-                        .setContentIntent(intent);
-                        //.setStyle(new NotificationCompat.BigTextStyle()
-                        //        .bigText(getString(R.string.notification_started_text)))
-                        //.addAction(android.R.drawable.ic_menu_close_clear_cancel,getString(R.string.dismiss), piDismiss);
+                        .setContentIntent(intent)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(getString(R.string.notification_started_text)))
+                        .addAction(android.R.drawable.ic_menu_close_clear_cancel,getString(R.string.dismiss), piDismiss);
         Notification n = mBuilder.build();
         n.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
         notifyManager.notify(NOTIFICATION_STARTED_ID, n);

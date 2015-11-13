@@ -18,9 +18,11 @@
         <activity
             android:name=".app.AWSActivity"
             android:label="@string/app_title"
+            android:launchMode="singleTask"
             android:icon="@drawable/ic_launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="org.thezero.blackhole.app.AWSActivity.ACTION_DISMISS" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>

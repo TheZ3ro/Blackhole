@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class AWSActivity extends ActionBarActivity {
     private static final int PREFERENCE_REQUEST_CODE = 1001;
-    public static final String ACTION_DISMISS = "dismiss";
+    public static final String ACTION_DISMISS = "org.thezero.blackhole.app.dismiss";
 
     volatile boolean stopWorker;
 	Thread workerThread;
@@ -100,6 +100,14 @@ public class AWSActivity extends ActionBarActivity {
             }
         }
      	
+    }
+
+    @Override
+    public void onNewIntent(Intent i){
+        String action = i.getAction();
+        String type = i.getType();
+        //Log.w("",action);
+        super.onNewIntent(i);
     }
      
 	@Override
