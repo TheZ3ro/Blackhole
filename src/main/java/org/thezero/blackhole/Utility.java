@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 
 import org.apache.http.conn.util.InetAddressUtils;
+import org.thezero.blackhole.webserver.WebServer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -180,6 +181,10 @@ public class Utility {
             }
         } catch (Exception ex) { } // for now eat exceptions
         return "";
+    }
+
+    public static String getHost() {
+       return "http://" + Utility.getIPAddress(true) + ":" + WebServer.DEFAULT_SERVER_PORT;
     }
 
     public static String getFileSize(File f){

@@ -13,16 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.thezero.blackhole.R;
-import org.thezero.blackhole.service.HTTPService;
 import org.thezero.blackhole.Utility;
-import org.thezero.blackhole.webserver.WebServer;
+import org.thezero.blackhole.service.HTTPService;
 
 import java.io.File;
 import java.io.IOException;
 
 public class AWSActivity extends ActionBarActivity {
     private static final int PREFERENCE_REQUEST_CODE = 1001;
-    public static final String ACTION_DISMISS = "org.thezero.blackhole.app.dismiss";
 
     volatile boolean stopWorker;
 	Thread workerThread;
@@ -49,7 +47,6 @@ public class AWSActivity extends ActionBarActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
-        //Log.w("",action);
 
         File folder = new File(Utility.BLACKHOLE_PATH);
         boolean success = true;
@@ -60,13 +57,6 @@ public class AWSActivity extends ActionBarActivity {
             Toast.makeText(AWSActivity.this, getString(R.string.storage_error), Toast.LENGTH_LONG).show();
         }
 
-        if(ACTION_DISMISS.equals(action)){
-            Intent i1 = new Intent(AWSActivity.this,HTTPService.class);
-            stopService(i1);
-            AppSettings.setServiceStarted(AWSActivity.this, false);
-            setButtonText(false);
-            setInfoText(false);
-        }
         if(Intent.ACTION_SEND.equals(action) && type != null) {
             Uri shareUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if(folder.exists()) {
@@ -104,10 +94,21 @@ public class AWSActivity extends ActionBarActivity {
 
     @Override
     public void onNewIntent(Intent i){
-        String action = i.getAction();
-        String type = i.getType();
-        //Log.w("",action);
         super.onNewIntent(i);
+        Bundle data = i.getExtras();
+
+        if (data != null && data.containsKey(BlackNotification.ACTION_KEY)) {
+            String action = data.getString(BlackNotification.ACTION_KEY);
+            if(action.equals(BlackNotification.ACTION_N_STOP)) {
+                Log.i(getString(R.string.app_name), data.getString(BlackNotification.ACTION_KEY));
+                Toast.makeText(AWSActivity.this, getString(R.string.stop_success), Toast.LENGTH_LONG).show();
+                Intent i1 = new Intent(AWSActivity.this, HTTPService.class);
+                stopService(i1);
+                AppSettings.setServiceStarted(AWSActivity.this, false);
+                setButtonText(false);
+                setInfoText(false);
+            }
+        }
     }
      
 	@Override
@@ -169,12 +170,12 @@ public class AWSActivity extends ActionBarActivity {
 		TextView txtLog = (TextView)findViewById(R.id.txtLog);
 		String text = getString(R.string.log_notrunning);
 		
-		if(isServiceRunning){
-			text = getString(R.string.log_running) + "\nhttp://" + Utility.getIPAddress(true) + ":" + WebServer.DEFAULT_SERVER_PORT;
-		}
+		if(isServiceRunning) {
+            text = getString(R.string.log_running) + "\n" + Utility.getHost();
+        }
 		
 		txtLog.setText(text);
-		Log.i(getString(R.string.app_name), text);
+		//Log.i(getString(R.string.app_name), text);
 	}
 	
 	private View.OnClickListener btnClick = new View.OnClickListener() {
