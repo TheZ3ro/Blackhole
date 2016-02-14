@@ -23,6 +23,6 @@ public class AppSettings {
 		SharedPreferences.Editor editor = pref.edit();
 		
 		editor.putBoolean(IS_SERVICE_STARTED, isStarted);
-		editor.commit();
+		editor.apply();
 	}
 }

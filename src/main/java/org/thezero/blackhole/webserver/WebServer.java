@@ -15,7 +15,6 @@ import org.apache.http.protocol.ResponseConnControl;
 import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
-import org.thezero.blackhole.app.AppSettings;
 import org.thezero.blackhole.webserver.handler.AssetHandler;
 import org.thezero.blackhole.webserver.handler.FileHandler;
 import org.thezero.blackhole.webserver.handler.GetApkHandler;
@@ -98,15 +97,13 @@ public class WebServer extends Thread {
 					httpService.handleRequest(serverConnection, httpContext);
 					
 					serverConnection.shutdown();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (HttpException e) {
+				} catch (IOException | HttpException e) {
 					e.printStackTrace();
 				}
 			}
 			
 			serverSocket.close();
-		} 
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -119,7 +116,6 @@ public class WebServer extends Thread {
 	
 	public synchronized void stopThread(){
 		isRunning = false;
-        AppSettings.setServiceStarted(context, false);
 	}
 
 	public void setContext(Context context) {

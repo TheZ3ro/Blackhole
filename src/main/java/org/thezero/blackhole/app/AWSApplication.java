@@ -21,7 +21,6 @@ public class AWSApplication extends Application {
 
 	@Override
 	public void onTerminate() {
-        AppSettings.setServiceStarted(AWSApplication.this, false);
         super.onTerminate();
     }
 }

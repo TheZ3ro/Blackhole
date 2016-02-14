@@ -1,12 +1,13 @@
 package org.thezero.blackhole.app;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,10 +40,12 @@ public class AWSActivity extends ActionBarActivity {
         prepareViews();
         setButtonHandlers();
         
-        boolean isRunning = AppSettings.isServiceStarted(this);
+        boolean isRunning = isMyServiceRunning(HTTPService.class);//AppSettings.isServiceStarted(this);
+        AppSettings.setServiceStarted(AWSActivity.this, isRunning);
         
         setButtonText(isRunning);
         setInfoText(isRunning);
+        AppLog.i(String.valueOf(isRunning));
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -58,36 +61,8 @@ public class AWSActivity extends ActionBarActivity {
         }
 
         if(Intent.ACTION_SEND.equals(action) && type != null) {
-            Uri shareUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            if(folder.exists()) {
-                String path=null;
-                if(shareUri.getScheme().equals("content")){
-                    path = Utility.getFilePathFromUri(this,shareUri);
-                }else if(shareUri.getScheme().equals("file")){
-                    path = shareUri.getPath();
-                }
-                if(path!=null) {
-                    File shareFile = new File(path);
-                    File toFile = new File(Utility.BLACKHOLE_PATH + File.separator + shareFile.getName());
-                    try {
-                        Utility.copy(shareFile, toFile);
-                        if (toFile.exists()) {
-                            Toast.makeText(AWSActivity.this, getString(R.string.share_success), Toast.LENGTH_LONG).show();
-                            Intent service = new Intent(AWSActivity.this, HTTPService.class);
-                            if (!AppSettings.isServiceStarted(AWSActivity.this)) {
-                                startService(service);
-                                AppSettings.setServiceStarted(AWSActivity.this, true);
-                                setButtonText(true);
-                                setInfoText(true);
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Toast.makeText(AWSActivity.this, getString(R.string.share_failed), Toast.LENGTH_LONG).show();
-                }
-            }
+            AppLog.i("now it's true");
+            getSharedFile(intent);
         }
      	
     }
@@ -95,12 +70,20 @@ public class AWSActivity extends ActionBarActivity {
     @Override
     public void onNewIntent(Intent i){
         super.onNewIntent(i);
-        Bundle data = i.getExtras();
+
+        String action = i.getAction();
+        String type = i.getType();
+
+        if(Intent.ACTION_SEND.equals(action) && type != null) {
+            getSharedFile(i);
+        }
+
+        /*Bundle data = i.getExtras();
 
         if (data != null && data.containsKey(BlackNotification.ACTION_KEY)) {
-            String action = data.getString(BlackNotification.ACTION_KEY);
-            if(action.equals(BlackNotification.ACTION_N_STOP)) {
-                Log.i(getString(R.string.app_name), data.getString(BlackNotification.ACTION_KEY));
+            String act = data.getString(BlackNotification.ACTION_KEY);
+            if(act.equals(BlackNotification.ACTION_N_STOP)) {
+                AppLog.i(data.getString(BlackNotification.ACTION_KEY));
                 Toast.makeText(AWSActivity.this, getString(R.string.stop_success), Toast.LENGTH_LONG).show();
                 Intent i1 = new Intent(AWSActivity.this, HTTPService.class);
                 stopService(i1);
@@ -108,7 +91,7 @@ public class AWSActivity extends ActionBarActivity {
                 setButtonText(false);
                 setInfoText(false);
             }
-        }
+        }*/
     }
      
 	@Override
@@ -130,13 +113,13 @@ public class AWSActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!AppSettings.isServiceStarted(AWSActivity.this)){
-            setButtonText(false);
-            setInfoText(false);
-        }
-        else{
+        if(AppSettings.isServiceStarted(AWSActivity.this)){
             setButtonText(true);
             setInfoText(true);
+        }
+        else {
+            setButtonText(false);
+            setInfoText(false);
         }
     }
 	
@@ -150,6 +133,35 @@ public class AWSActivity extends ActionBarActivity {
 			}
 		}
 	}
+
+    private void getSharedFile(Intent intent) {
+        Uri shareUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        File folder = new File(Utility.BLACKHOLE_PATH);
+        if(folder.exists()) {
+            String path = Utility.getPath(this,shareUri);
+            if(path!=null) {
+                File shareFile = new File(path);
+                File toFile = new File(Utility.BLACKHOLE_PATH + File.separator + shareFile.getName());
+                try {
+                    Utility.copy(shareFile, toFile);
+                    if (toFile.exists()) {
+                        Toast.makeText(AWSActivity.this, getString(R.string.share_success), Toast.LENGTH_LONG).show();
+                        /*Intent service = new Intent(AWSActivity.this, HTTPService.class);
+                        if (!AppSettings.isServiceStarted(AWSActivity.this)) {
+                            startService(service);
+                            AppSettings.setServiceStarted(AWSActivity.this, true);
+                            setButtonText(true);
+                            setInfoText(true);
+                        }*/
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Toast.makeText(AWSActivity.this, getString(R.string.share_failed), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 	
 	private void setButtonHandlers() {
 		((Button)findViewById(R.id.btnStartStop)).setOnClickListener(btnClick);
@@ -175,7 +187,6 @@ public class AWSActivity extends ActionBarActivity {
         }
 		
 		txtLog.setText(text);
-		//Log.i(getString(R.string.app_name), text);
 	}
 	
 	private View.OnClickListener btnClick = new View.OnClickListener() {
@@ -205,4 +216,14 @@ public class AWSActivity extends ActionBarActivity {
 			}
 		}
 	};
+
+    public boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

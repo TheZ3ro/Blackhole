@@ -12,12 +12,14 @@ import org.thezero.blackhole.webserver.WebServer;
 
 public class HTTPService extends Service {
 	public static final int NOTIFICATION_STARTED_ID = 239;
+
 	private NotificationManager notifyManager = null;
 	private WebServer server = null;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
 		notifyManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		server = new WebServer(this);
 	}
@@ -27,7 +29,7 @@ public class HTTPService extends Service {
 		server.stopThread();
 		notifyManager.cancel(NOTIFICATION_STARTED_ID);
 		notifyManager = null;
-        AppSettings.setServiceStarted(this, false);
+		AppSettings.setServiceStarted(HTTPService.this, false);
 		super.onDestroy();
 	}
 
