@@ -197,7 +197,7 @@ public class AWSActivity extends ActionBarActivity {
 				case R.id.btnStartStop:{
 					Intent intent = new Intent(AWSActivity.this,HTTPService.class);
 					
-					if(AppSettings.isServiceStarted(AWSActivity.this)){
+					if(isMyServiceRunning(HTTPService.class)){
 						stopService(intent);
 						
 						AppSettings.setServiceStarted(AWSActivity.this, false);

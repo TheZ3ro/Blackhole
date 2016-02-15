@@ -16,6 +16,7 @@ import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.thezero.blackhole.webserver.handler.AssetHandler;
+import org.thezero.blackhole.webserver.handler.DownloadAllHandler;
 import org.thezero.blackhole.webserver.handler.FileHandler;
 import org.thezero.blackhole.webserver.handler.GetApkHandler;
 import org.thezero.blackhole.webserver.handler.ListingHandler;
@@ -35,6 +36,7 @@ public class WebServer extends Thread {
 	private static final String FILE_PATTERN = "/file/*";
     private static final String GETAPK_PATTERN = "/blackhole.apk";
     private static final String UPLOAD_PATTERN = "/upload";
+    private static final String DOWNLOAD_ALL_PATTERN = "/all.zip";
 	
 	private boolean isRunning = false;
 	private Context context = null;
@@ -73,7 +75,8 @@ public class WebServer extends Thread {
         registry.register(FILE_PATTERN, new FileHandler(context));
         registry.register(GETAPK_PATTERN, new GetApkHandler(context));
         registry.register(UPLOAD_PATTERN, new UploadHandler(context));
-        
+        registry.register(DOWNLOAD_ALL_PATTERN, new DownloadAllHandler(context));
+
         httpService.setHandlerResolver(registry);
 	}
 	
