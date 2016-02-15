@@ -13,7 +13,6 @@ Heavily based on com.varma.android.aws.
 
 ## TODO
 
-- Implement the "Download All" function (ZipFile)
 - Preference with selectable Port and (optional) Password
 - Better Activity UI
 - Stop the service from the BigView Notification
